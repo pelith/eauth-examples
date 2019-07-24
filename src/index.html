@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EauthJS Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+</head>
+<body>
+
+<div id="main">
+  {% if session.address %}
+  <div class="py-5">
+    <h3>Hello, {{ session.address }}</h3>
+    <button class="btn btn-outline-dark" onclick="location.href='./logout'">Log out</button>
+  </div>
+  {% else %}
+  <div class="py-5">
+    <div class="py-3">
+      <h3>Using OAuth from <a href="https://github.com/pelith/node-eauth-server" target="_blank">node-eauth-server</a></h3>
+      <button id="eauth-login" class="btn btn-outline-dark">OAuth Login</button>
+    </div>
+
+    <div class="py-3">
+      <h3>Login using Eauth SDK (<a href="https://github.com/pelith/express-eauth" target="_blank">express-eauth</a>)</h3>
+      <button id="fortmatic-login" class="btn btn-outline-dark">Fortmatic Login</button>
+      <button id="eth-login" class="btn btn-outline-dark">ETH Login</button>
+    </div>
+
+    <div class="py-3">
+      <h3>Login using Eauth SDK with callback (showing results in console)</h3>
+      <button id="fortmatic-login-callback" class="btn btn-outline-dark">Fortmatic Login With Callback</button>
+      <button id="eth-login-callback" class="btn btn-outline-dark">ETH Login With Callback</button>
+    </div>
+
+    <div class="py-3">
+      <h3>Login from Proxy (showing results in console)</h3>
+      <button id="fortmatic-login-proxy" class="btn btn-outline-dark">Fortmatic Login Using Proxy</button>
+      <button id="eth-login-proxy" class="btn btn-outline-dark">ETH Login Using Proxy</button>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/pelith/eauth.js/dist/eauth.min.js"></script>
+
+{% if not session.address %}
+<script type="text/javascript">
+
+/* ----------- OAuth example----------- */
+const eauthOauth = new Eauth({
+    OAUTH_CLIENT_ID: '{{ clientID }}',
+    OAUTH_URL: '{{ oauthURL }}',
+    OAUTH_REDIRECT_URI: '{{ redirectURI }}',
+    OAUTH_STATE: '{{ sessionID }}',
+})
+
+document.getElementById('eauth-login').onclick = (() => { eauthOauth.oauthLogin() })
+
+
+/* ----------- SDK example----------- */
+const eauthSimple = new Eauth({
+    AUTH_ROUTE: 'http://localhost:59011/auth',
+})
+
+document.getElementById('fortmatic-login').onclick = (() => { eauthSimple.fortmaticLogin() })
+document.getElementById('eth-login').onclick = (() => { eauthSimple.ethLogin() })
+
+const showResult = function() {
+  console.log(eauthSimple.AUTH_RESPONSE)
+}
+
+document.getElementById('fortmatic-login-callback').onclick = (() => { eauthSimple.fortmaticLogin(showResult) })
+document.getElementById('eth-login-callback').onclick = (() => { eauthSimple.ethLogin(showResult) })
+
+
+/* ----------- Proxy example----------- */
+const eauthProxy = new Eauth({
+    AUTH_ROUTE: 'http://localhost/eauth/auth',
+})
+
+const showProxyResult = function() {
+  console.log(eauthProxy.AUTH_RESPONSE)
+}
+
+document.getElementById('fortmatic-login-proxy').onclick = (() => { eauthProxy.fortmaticLogin(showProxyResult) })
+document.getElementById('eth-login-proxy').onclick = (() => { eauthProxy.ethLogin(showProxyResult) })
+</script>
+{% endif %}
+</body>
+</html>
