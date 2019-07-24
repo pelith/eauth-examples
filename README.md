@@ -14,7 +14,7 @@ yarn start
 | -------- | -------- | -------- | -------- |
 | using [node-eauth-server](https://github.com/pelith/node-eauth-server) for OAuth     | http://localhost:59011/     | [src/index.html#L49](https://github.com/pelith/eauth-examples/blob/master/src/index.html#L49)     | [server.js#L18](https://github.com/pelith/eauth-examples/blob/master/server.js#L18)     |
 | using [Eauth SDK (express)](https://github.com/pelith/express-eauth)     | http://localhost:59011/     | [src/index.html#L60](https://github.com/pelith/eauth-examples/blob/master/src/index.html#L60)     | [server.js#L90](https://github.com/pelith/eauth-examples/blob/master/server.js#L90)     |
-| using [node-eauth-server](https://github.com/pelith/node-eauth-server) as auth server through proxy     | http://localhost/     | [src/index.html#L76](https://github.com/pelith/eauth-examples/blob/master/src/index.html#L76)     | Check Setup     |
+| using [node-eauth-server](https://github.com/pelith/node-eauth-server) as auth server through proxy     | http://localhost/     | [src/index.html#L76](https://github.com/pelith/eauth-examples/blob/master/src/index.html#L76)     | Checkout Setup     |
 
 
 ## Setup
