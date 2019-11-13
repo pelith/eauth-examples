@@ -22,18 +22,21 @@
     <div class="py-3">
       <h3>Login using Eauth SDK (<a href="https://github.com/pelith/express-eauth" target="_blank">express-eauth</a>)</h3>
       <button id="fortmatic-login" class="btn btn-outline-dark">Fortmatic Login</button>
+      <button id="authereum-login" class="btn btn-outline-dark">Authereum Login</button>
       <button id="eth-login" class="btn btn-outline-dark">ETH Login</button>
     </div>
 
     <div class="py-3">
       <h3>Login using Eauth SDK with callback (showing results in console)</h3>
       <button id="fortmatic-login-callback" class="btn btn-outline-dark">Fortmatic Login With Callback</button>
+      <button id="authereum-login-callback" class="btn btn-outline-dark">Authereum Login With Callback</button>
       <button id="eth-login-callback" class="btn btn-outline-dark">ETH Login With Callback</button>
     </div>
 
     <div class="py-3">
       <h3>Login from Proxy (showing results in console)</h3>
       <button id="fortmatic-login-proxy" class="btn btn-outline-dark">Fortmatic Login Using Proxy</button>
+      <button id="authereum-login-proxy" class="btn btn-outline-dark">Authereum Login Using Proxy</button>
       <button id="eth-login-proxy" class="btn btn-outline-dark">ETH Login Using Proxy</button>
     </div>
   </div>
@@ -41,6 +44,7 @@
 </div>
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/authereum@latest/authereum.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/pelith/eauth.js/dist/eauth.min.js"></script>
 
 {% if not session.address %}
@@ -63,6 +67,7 @@ const eauthSimple = new Eauth({
 })
 
 document.getElementById('fortmatic-login').onclick = (() => { eauthSimple.fortmaticLogin() })
+document.getElementById('authereum-login').onclick = (() => { eauthSimple.authereumLogin() })
 document.getElementById('eth-login').onclick = (() => { eauthSimple.ethLogin() })
 
 const showResult = function() {
@@ -70,6 +75,7 @@ const showResult = function() {
 }
 
 document.getElementById('fortmatic-login-callback').onclick = (() => { eauthSimple.fortmaticLogin(showResult) })
+document.getElementById('authereum-login-callback').onclick = (() => { eauthSimple.authereumLogin(showResult) })
 document.getElementById('eth-login-callback').onclick = (() => { eauthSimple.ethLogin(showResult) })
 
 
@@ -83,6 +89,7 @@ const showProxyResult = function() {
 }
 
 document.getElementById('fortmatic-login-proxy').onclick = (() => { eauthProxy.fortmaticLogin(showProxyResult) })
+document.getElementById('authereum-login-proxy').onclick = (() => { eauthProxy.authereumLogin(showProxyResult) })
 document.getElementById('eth-login-proxy').onclick = (() => { eauthProxy.ethLogin(showProxyResult) })
 </script>
 {% endif %}

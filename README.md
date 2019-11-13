@@ -33,6 +33,12 @@ yarn start
    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
    ```
 
+- For Authereum
+
+   ```
+   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/authereum@latest/authereum.js"></script>
+   ```
+
 ### For local [node-eauth-server](https://github.com/pelith/node-eauth-server)
 
 1. follow the installation
@@ -50,13 +56,13 @@ yarn start
    server {
            listen 80 default_server;
            listen [::]:80 default_server;
-   
+
            root /var/www/html;
-   
+
            index index.html index.htm index.nginx-debian.html;
-   
+
            server_name _;
-   
+
            location / {
                    proxy_pass http://localhost:59011/;
                    proxy_http_version 1.1;
@@ -66,10 +72,10 @@ yarn start
                    proxy_set_header X-Real-IP $remote_addr;
                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                    proxy_cache_bypass $http_upgrade;
-   
+
                    try_files $uri $uri/ =404;
            }
-   
+
            location /eauth/ {
                    proxy_pass http://localhost:8080/;
                    proxy_http_version 1.1;
