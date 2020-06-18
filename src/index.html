@@ -7,7 +7,12 @@
 <body>
 
 <div id="main">
-  {% if session.address %}
+  {% if session.ens %}
+  <div class="py-5">
+    <h3>Hello, {{ session.ens }} ({{ session.address }})</h3>
+    <button class="btn btn-outline-dark" onclick="location.href='./logout'">Log out</button>
+  </div>
+  {% elseif session.address %}
   <div class="py-5">
     <h3>Hello, {{ session.address }}</h3>
     <button class="btn btn-outline-dark" onclick="location.href='./logout'">Log out</button>

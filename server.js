@@ -74,7 +74,8 @@ app.get('/oauth_success', (req, resp) => {
         })
     })
     .then(userData => {
-        const { id, address } = userData
+        const { id, ens, address } = userData
+        req.session.ens = ens
         req.session.address = address
         console.log(req.session)
         resp.redirect('/')
