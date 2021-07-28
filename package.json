@@ -12,10 +12,9 @@
   "dependencies": {
     "async": "^3.1.0",
     "express": "^4.16.4",
-    "express-eauth": "^1.2.1",
+    "express-eauth": "^2.1.0",
     "express-nunjucks": "^2.2.3",
     "express-session": "^1.15.6",
-    "mobile-detect": "^1.4.3",
     "nunjucks": "^3.2.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"

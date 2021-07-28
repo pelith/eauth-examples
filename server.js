@@ -4,7 +4,6 @@ const expressNunjucks = require('express-nunjucks')
 const session = require('express-session')
 const rp = require('request-promise')
 const async = require('async')
-const MobileDetect = require('mobile-detect')
 
 const app = express()
 app.set('views', __dirname + '/dist');
@@ -89,18 +88,7 @@ app.get('/oauth_success', (req, resp) => {
 
 
 /* ----------- SDK example----------- */
-const eauthDefault = new Eauth({ banner: 'Eauth Sample' })
-const eauthMobile = new Eauth({ banner: 'Eauth Sample', method: 'personal_sign' }) // only for mobile
-
-async function eauthMiddleware(req, res, next) {
-  let middleware = eauthDefault
-  const md = new MobileDetect(req.headers['user-agent'])
-  if (md.mobile()) middleware = eauthMobile
-
-  async.series([middleware.bind(null, req, res)], (err) => {
-    return err ? next(err) : next()
-  })
-}
+const eauthMiddleware = new Eauth({ banner: 'Eauth Sample', method: 'eth_signTypedData_v4' })
 
 /* --- Step 1: authentication request --- */
 app.get('/auth/:Address', eauthMiddleware, (req, res) => {

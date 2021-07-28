@@ -25,38 +25,71 @@
     </div>
 
     <div class="py-3">
-      <h3>Login using Eauth SDK (<a href="https://github.com/pelith/express-eauth" target="_blank">express-eauth</a>)</h3>
-      <button id="fortmatic-login" class="btn btn-outline-dark">Fortmatic Login</button>
-      <button id="eth-login" class="btn btn-outline-dark">ETH Login</button>
-    </div>
-
-    <div class="py-3">
-      <h3>Login using Eauth SDK with callback (showing results in console)</h3>
-      <button id="fortmatic-login-callback" class="btn btn-outline-dark">Fortmatic Login With Callback</button>
-      <button id="eth-login-callback" class="btn btn-outline-dark">ETH Login With Callback</button>
+      <h3>Login using <a href="https://github.com/pelith/express-eauth" target="_blank">express-eauth</a> (showing results in console)</h3>
+      <button id="eth-login" class="btn btn-outline-dark">Signin with Ethereum Wallet</button>
     </div>
 
     <div class="py-3">
       <h3>Login from Proxy (showing results in console)</h3>
-      <button id="fortmatic-login-proxy" class="btn btn-outline-dark">Fortmatic Login Using Proxy</button>
-      <button id="eth-login-proxy" class="btn btn-outline-dark">ETH Login Using Proxy</button>
+      <button id="eth-login-proxy" class="btn btn-outline-dark">Signin with Ethereum Wallet Using Proxy</button>
     </div>
   </div>
   {% endif %}
 </div>
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/pelith/eauth.js/dist/eauth.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/@toruslabs/torus-embed@1.11.0/dist/torus.umd.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/authereum@latest/authereum.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@portis/web3@4.0.5/umd/index.js"></script>
+<script type="text/javascript" src="https://unpkg.com/web3modal@1.9.3/dist/index.js"></script>
+<script type="text/javascript" src="https://unpkg.com/eauth.js@latest/dist/eauth.umd.production.min.js"></script>
 
 {% if not session.address %}
 <script type="text/javascript">
+const Web3Modal = window.Web3Modal.default
+const WalletConnectProvider = window.WalletConnectProvider.default
+const Eauth = window.Eauth.default
+
+const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      infuraId: '3c15ed5027f541278717d536db299ef4',
+    },
+  },
+  torus: {
+    package: Torus,
+  },
+  authereum: {
+    package: Authereum,
+  },
+  fortmatic: {
+    package: Fortmatic,
+    options: {
+      key: 'pk_live_CC75CEEE7D7E8630',
+    },
+  },
+  portis: {
+    package: Portis,
+    options: {
+      id: 'f36fb347-a067-42a8-82b7-ca77cf8b7277',
+    },
+  },
+}
+
+const web3Modal = new Web3Modal({
+  cacheProvider: false, // optional
+  providerOptions, // required
+  disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+})
 
 /* ----------- OAuth example----------- */
 const eauthOauth = new Eauth({
-    OAUTH_CLIENT_ID: '{{ clientID }}',
-    OAUTH_URL: '{{ oauthURL }}',
-    OAUTH_REDIRECT_URI: '{{ redirectURI }}',
-    OAUTH_STATE: '{{ sessionID }}',
+  OAUTH_CLIENT_ID: '{{ clientID }}',
+  OAUTH_URL: '{{ oauthURL }}',
+  OAUTH_REDIRECT_URI: '{{ redirectURI }}',
+  OAUTH_STATE: '{{ sessionID }}',
 })
 
 document.getElementById('eauth-login').onclick = (() => { eauthOauth.oauthLogin() })
@@ -64,31 +97,44 @@ document.getElementById('eauth-login').onclick = (() => { eauthOauth.oauthLogin(
 
 /* ----------- SDK example----------- */
 const eauthSimple = new Eauth({
-    AUTH_ROUTE: 'http://localhost:59011/auth',
+  AUTH_ROUTE: 'http://localhost:59011/auth',
 })
 
-document.getElementById('fortmatic-login').onclick = (() => { eauthSimple.fortmaticLogin() })
-document.getElementById('eth-login').onclick = (() => { eauthSimple.ethLogin() })
+async function onConnect() {
+  try {
+    const provider = await web3Modal.connect()
+    eauthSimple.ethLogin(provider, showResult)
+  } catch (e) {
+    console.log('Could not get a wallet connection', e)
+  }
+}
+
+document.getElementById('eth-login').onclick = (() => { onConnect() })
 
 const showResult = function() {
   console.log(eauthSimple.AUTH_RESPONSE)
 }
 
-document.getElementById('fortmatic-login-callback').onclick = (() => { eauthSimple.fortmaticLogin(showResult) })
-document.getElementById('eth-login-callback').onclick = (() => { eauthSimple.ethLogin(showResult) })
-
 
 /* ----------- Proxy example----------- */
 const eauthProxy = new Eauth({
-    AUTH_ROUTE: 'http://localhost/eauth/auth',
+  AUTH_ROUTE: 'http://localhost/eauth/auth',
 })
 
 const showProxyResult = function() {
   console.log(eauthProxy.AUTH_RESPONSE)
 }
 
-document.getElementById('fortmatic-login-proxy').onclick = (() => { eauthProxy.fortmaticLogin(showProxyResult) })
-document.getElementById('eth-login-proxy').onclick = (() => { eauthProxy.ethLogin(showProxyResult) })
+async function onConnectProxy() {
+  try {
+    const provider = await web3Modal.connect()
+    eauthProxy.ethLogin(provider, showProxyResult)
+  } catch (e) {
+    console.log('Could not get a wallet connection', e)
+  }
+}
+
+document.getElementById('eth-login-proxy').onclick = (() => { onConnectProxy() })
 </script>
 {% endif %}
 </body>
